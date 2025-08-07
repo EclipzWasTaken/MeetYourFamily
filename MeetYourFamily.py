@@ -18,11 +18,11 @@ list_of_titles = [['DAD', Dad], ['MOM', Mom], ['AUNT', Aunt], ['LITTLE SIS', Lit
 # Load base video
 base_clip = VideoFileClip(base_video_path)
 
-# take the first 13 seconds of the base video
-base_clip = base_clip.with_duration(13).resized(height=1920, width=1080).without_audio()
+# take the first 16 seconds of the base video
+base_clip = base_clip.with_duration(16).resized(height=1920, width=1080).without_audio()
 
 # Add text to the base video
-base_text = TextClip(text="Meet Your Family", font_size=90, color='blue', font= 'font.ttf', size = (340, 500)).with_duration(13).with_position(("center", 500))
+base_text = TextClip(text="Meet Your Family", font_size=90, color='blue', font= 'font.ttf').with_duration(13).with_position(("center", 500))
 base_clip = CompositeVideoClip([base_clip, base_text])
 
 clips = [base_clip]
