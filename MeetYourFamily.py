@@ -1,6 +1,6 @@
 from moviepy import VideoFileClip, ImageClip, TextClip, CompositeVideoClip, concatenate_videoclips, AudioFileClip
 import random
-
+from youtube import upload_video
 # Base video path
 base_video_path = "Base Video.mp4"
 
@@ -11,7 +11,7 @@ Aunt = ['Trump', 'Putin', 'Musk', 'Kim', 'Biden']
 Big_sis = ['Mcrae', 'Eilish', 'Charli', 'Beer']
 Friend = ['Tate', 'Speed', 'Ross', 'NLE', 'Hart', 'Druski', 'Cenat', 'Black']
 Aunty_Daughter = ['SZA', 'Stallion', 'Spice', 'Minaj']
-
+song = ['Brother', 'grr', 'NLU', 'sus', 'TD']
 
 list_of_titles = [['DAD', Dad], ['MOM', Mom], ['AUNT', Aunt], ['LITTLE SIS', Little_Sis], ['BIG SIS', Big_sis], ['FRIEND', Friend], ["Mi Prima", Aunty_Daughter]]
 
@@ -40,7 +40,7 @@ for title in list_of_titles:
     #base_clip = concatenate_videoclips([base_clip, person_clip, text_clip])
     clips.append(final_clip)
 
-audio = AudioFileClip('Brother.mp3')
+audio = AudioFileClip(f'songs/{random.choice(song)}.mp3').with_duration(52)
 
 
 # Concatenate all clips into a final video
@@ -48,3 +48,8 @@ final_video = concatenate_videoclips(clips, method="compose")
 final_video = final_video.with_audio(audio) # Add audio to the final video
 # Save the final video
 final_video.write_videofile("MeetYourFamily.mp4", fps=24)
+
+upload_video("MeetYourFamily.mp4", "Say Hello to Your New Celebrity Family 😎✨ (You’ve Been Adopted)", 
+                 "Ever wonder what it’s like to have famous parents, iconic siblings, and a drama-packed group chat? Well, " \
+                 "guess what... you’re in the family now. Let’s meet your celebrity relatives — and yes, one of them definitely cries at award shows."
+                 "#YourFamousFamily #CelebrityDNA #WelcomeToTheClique", privacy_status="public")
