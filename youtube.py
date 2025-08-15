@@ -3,6 +3,7 @@ import pickle
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
+from google.auth.transport.requests import Request
 
 # Step 1: Authenticate and get credentials
 def get_authenticated_service():
