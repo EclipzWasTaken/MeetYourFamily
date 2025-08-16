@@ -31,7 +31,7 @@ def upload():
     upload_video("MeetYourFamily.mp4", "Say Hello to Your New Celebrity Family 😎✨ (You’ve Been Adopted)", 
                  "Ever wonder what it’s like to have famous parents, iconic siblings, and a drama-packed group chat? Well, " 
                  "guess what... you’re in the family now. Let’s meet your celebrity relatives — and yes, one of them definitely cries at award shows."
-                 "#YourFamousFamily #CelebrityDNA #WelcomeToTheClique #Israel", privacy_status="public")
+                 "#YourFamousFamily #CelebrityDNA #WelcomeToTheClique #Israel #Shorts", privacy_status="public")
 
 # Load base video
 base_clip = VideoFileClip(f'base_clips/{random.choice(base_clips)}.mp4')
@@ -72,17 +72,52 @@ text_clips = concatenate_videoclips(text_clips, method="chain").with_position(("
 
 final_video = CompositeVideoClip([final_video, text_clips])
 
-num = random.randint(0, 3)
+TARGET_W, TARGET_H = 1440, 2560
+num = 2 # random.randint(0, 3)
+
 if num == 0:
-    final_video = clips_array([[final_video], [sub_clip]])
+    # Double stack (vertical)
+    final_video = clips_array([
+        [final_video],
+        [sub_clip]
+    ])
+    final_video = final_video.resized((TARGET_W, TARGET_H))
     print('double')
+
 elif num == 1:
-    final_video = clips_array([[final_video, sub_clip], [createSubClip(), createSubClip()]])
+    # Quad layout (2x2 grid)
+    sub_w, sub_h = TARGET_W // 2, TARGET_H // 2  
+
+    final_resized = final_video.resized((sub_w, sub_h))
+    sub_resized = sub_clip.resized((sub_w, sub_h))
+
+    quad = clips_array([
+        [final_resized, sub_resized],
+        [createSubClip().resized((sub_w, sub_h)), createSubClip().resized((sub_w, sub_h))]
+    ])
+
+    final_video = quad.resize((TARGET_W, TARGET_H))
     print('quad')
+
 elif num == 2:
-    final_video = clips_array([[final_video, sub_clip], [createSubClip(), createSubClip()], [createSubClip(), createSubClip()]])
+    # Hexa layout (3 rows, 2 columns)
+    sub_w, sub_h = TARGET_W // 2, TARGET_H // 3  
+
+    final_resized = final_video.resized((sub_w, sub_h))
+    sub_resized = sub_clip.resized((sub_w, sub_h))
+
+    hexa = clips_array([
+        [final_resized, sub_resized],
+        [createSubClip().resized((sub_w, sub_h)), createSubClip().resized((sub_w, sub_h))],
+        [createSubClip().resized((sub_w, sub_h)), createSubClip().resized((sub_w, sub_h))]
+    ])
+
+    final_video = hexa.resized((TARGET_W, TARGET_H))
     print('hexa')
+
 else:
+    # Single — just resize to Shorts format
+    final_video = final_video.resized((TARGET_W, TARGET_H))
     print('single')
 
 
