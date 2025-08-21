@@ -17,14 +17,18 @@ Friend = ['Tate', 'Speed', 'Ross', 'NLE', 'Hart', 'Druski', 'Cenat', 'Black']
 Aunty_Daughter = ['SZA', 'Stallion', 'Spice', 'Minaj']
 song = ['Brother', 'grr', 'NLU', 'sus', 'TD', 'bar', 'said', 'confidence', 'bryan', 'rock']
 base_clips = ['Base Video', 'beach', 'beer', 'diva', 'lava', 'water', 'waterfall']
-rot_clips = ['bed', 'car', 'hydro', 'mine', 'sub', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+rot_clips = ['bed', 'car', 'hydro', 'mine', 'sub', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'fish', 'workout', 'tsa', 'phone', 'faces', 'airport', 'soccer', 'familyguy', 'college', 'bath']
 
 list_of_titles = [['DAD', Dad], ['MOM', Mom], ['AUNT', Aunt], ['LITTLE SIS', Little_Sis], ['BIG SIS', Big_sis], ['FRIEND', Friend], ["Mi Prima", Aunty_Daughter]]
 
-def createSubClip():
+def createSubClip() -> VideoFileClip:
     rot_choice = random.randint(0, len(rot_clips) - 1)
-    sub_clip = VideoFileClip(f'rot_clips/{rot_clips.pop(rot_choice)}.mp4').without_audio().with_duration(video_length)
+    sub_clip = VideoFileClip(f'rot_clips/{rot_clips.pop(rot_choice)}.mp4').without_audio().with_duration(6)
     sub_clip = sub_clip.resized(height=720)
+    while len(rot_clips) > 0 and sub_clip.duration < video_length:
+        rot_choice = random.randint(0, len(rot_clips) - 1)
+        sub_clip = concatenate_videoclips([sub_clip, VideoFileClip(f'rot_clips/{rot_clips.pop(rot_choice)}.mp4').resized(height=720).with_duration(random.randint(6, 12))], method="chain")
+    sub_clip = sub_clip.with_duration(video_length)
     return sub_clip
 
 def upload():
@@ -73,7 +77,7 @@ text_clips = concatenate_videoclips(text_clips, method="chain").with_position(("
 final_video = CompositeVideoClip([final_video, text_clips])
 
 TARGET_W, TARGET_H = 1440, 2560
-num = 2 # random.randint(0, 3)
+num = 2#random.randint(0, 3)
 
 if num == 0:
     # Double stack (vertical)
@@ -96,7 +100,7 @@ elif num == 1:
         [createSubClip().resized((sub_w, sub_h)), createSubClip().resized((sub_w, sub_h))]
     ])
 
-    final_video = quad.resize((TARGET_W, TARGET_H))
+    final_video = quad.resized((TARGET_W, TARGET_H))
     print('quad')
 
 elif num == 2:
